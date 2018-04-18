@@ -38,7 +38,7 @@ body {
 }
 
 .footer .logo {
-    background: url(../img/logo-b.png) center / contain no-repeat;
+    background: url(../images/logo-b.png) center / contain no-repeat;
     height: 1.8rem;
 }
 
@@ -97,7 +97,7 @@ body {
 }
 
 .logo-main .col:first-child {
-    background: url(../img/logo-b.png) left center no-repeat content-box;
+    background: url(../images/logo-b.png) left center no-repeat content-box;
     height: 70px;
 }
 

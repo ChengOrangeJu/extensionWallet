@@ -2,11 +2,11 @@
 <html>
 <head>
     <meta charset=utf-8>
-    <link rel="icon shortcut" href=img/logo.png type=image/png>
-    <link rel=apple-touch-icon href=img/logo.png>
-    <link rel=stylesheet href=lib/bootstrap-4.0.0-dist/css/bootstrap.min.css>
-    <link rel=stylesheet href=css/base.css>
-    <link rel=stylesheet href=css/ui-block.css>
+    <link rel="icon shortcut" href=../images/logo.png>
+    <link rel=apple-touch-icon href=../images/logo.png>
+    <link rel=stylesheet href=../lib/bootstrap-4.0.0-dist/css/bootstrap.min.css>
+    <link rel=stylesheet href=../css/base.css>
+    <link rel=stylesheet href=../css/ui-block.css>
     <meta name=viewport content="width=device-width">
     <title>NEBULAS</title>
     <style>
@@ -26,9 +26,17 @@
         .wallet_help {
             font-size: 0.8rem;
         }
+
+        div#main-outer {
+            width: 400px;
+            margin: 5px;
+            /*background: #DDD;*/
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
+    <div id=main-outer>
     <div class=logo-main></div>
     <div class=header></div>
 
@@ -57,56 +65,17 @@
 
     <div class=footer></div>
 
-    <script src=lib/jquery-3.3.1.min.js></script>
-    <script src=lib/bootstrap-4.0.0-dist/js/bootstrap.bundle.min.js data-depends=jquery.slim></script>
-    <script src=lib/bootbox.min.js data-depends="bootstrap jquery.slim"></script>
-    <script src=lib/Blob.js></script>
-    <script src=lib/FileSaver.min.js></script>
-    <script src=lib/nebulas.js></script>
-    <script src=js/1-localSave.js></script>
-    <script src=js/home.v1.js></script>
-    <script src=js/i18n.js data-depends=jquery.slim></script>
-    <script src=js/ui-block.js data-depends="bootbox blockies jquery.slim i18n.js nebulas.js"></script>
-    <script>
-        "use strict";
-
-        // replace ="([^ =]+)" with =$1
-
-        var nebulas = require("nebulas"),
-            account = nebulas.Account.NewAccount(),
-            validateAll = uiBlock.validate();
-
-        uiBlock.insert({
-            footer: ".footer",
-            header: ".header",
-            logoMain: ".logo-main"
-        });
-
-        $("#creat").on("click", onClickCreate);
-        $(".download button").on("click", onClickDownloadButton);
-
-        function onClickCreate() {
-            validateAll() && $(".download").removeClass("active1");
-        }
-
-        function onClickDownloadButton() {
-            var password = $("#password").val(), address, keyStr, blob;
-
-            if (validateAll()) {
-                bootbox.alert({
-                    message: "waiting...",
-                    title: "info"
-                });
-
-                // window.open('tokey.html?password=' + password, '_blank');
-
-                address = account.getAddressString();
-                keyStr = account.toKeyString(password);
-                blob = new Blob([keyStr], { type: "application/json; charset=utf-8" });
-                saveAs(blob, address);
-                bootbox.hideAll();
-            }
-        }
-    </script>
+    <script src=../lib/jquery-3.3.1.min.js></script>
+    <script src=../lib/bootstrap-4.0.0-dist/js/bootstrap.bundle.min.js data-depends=jquery.slim></script>
+    <script src=../lib/bootbox.min.js data-depends="bootstrap jquery.slim"></script>
+    <script src=../lib/Blob.js></script>
+    <script src=../lib/FileSaver.min.js></script>
+    <script src=../js/nebulas.js></script>
+    <script src=../js/1-localSave.js></script>
+    <script src=../js/home.v1.js></script>
+    <script src=../js/i18n.js data-depends=jquery.slim></script>
+    <script src=../js/ui-block.js data-depends="bootbox blockies jquery.slim i18n.js nebulas.js"></script>
+    <script src=../js/index.js></script>
+    </div>
 </body>
 </html>

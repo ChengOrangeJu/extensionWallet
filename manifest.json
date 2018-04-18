@@ -20,7 +20,8 @@
             "19": "images/icon_19.png",
             "38": "images/icon_38.png"
         },
-        "default_popup": "html/main.html"
+//        "default_popup": "html/main.html"
+        "default_popup": "html/index.html"
     },
 
     //additional

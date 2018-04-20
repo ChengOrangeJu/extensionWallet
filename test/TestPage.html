@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>发送poseMessage</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+function displayDate(){
+	document.getElementById("demo").innerHTML=Date();
+}
+</script>
+
+</head>
+<body>
+
+<h2>测试postMessage</h2>
+
+<form >
+    contract address:
+    <input id="inputContractAddress" >
+    <br>
+    account address:
+    <input id="inputAccountAddress" >
+    <br>
+    amount:
+    <input id="inputAmount" >
+    NAS
+    <br><br>
+
+    <button type="button" id="theButton" >poseMessage</button>
+</form>
+
+<p id="demo">点击按钮, 向extension发送message</p>
+
+
+
+
+
+<script>
+
+document.getElementById("theButton").addEventListener("click",function() 
+{	
+	console.log("********* click bubtton *****************")
+    var from = document.getElementById("inputAccountAddress").value
+    var to = document.getElementById("inputContractAddress").value
+    var amount = document.getElementById("inputAmount").value
+
+ 	window.postMessage({
+        "target": "contentscript",
+        "data":{
+            "from": from,
+            "to": to,
+            "value": amount
+        },
+        "method": "neb_sendTransaction",
+    }, "*");
+
+}, false);
+
+/*
+// Event listener
+window.addEventListener('message', function(e) {
+    // e.detail contains the transferred data (can be anything, ranging
+    // from JavaScript objects to strings).
+    console.log("recived by page:" + e + ", toString(e):"+ toString(e)+", e.toString():"+ e.toString()+ ", JSON.stringify(e):"+JSON.stringify(e));
+    //console.log("source:" + e.source+ ",data" + e.data +',stringify' + JSON.stringify(e.data));
+});
+*/
+</script>
+
+</body>
+</html>

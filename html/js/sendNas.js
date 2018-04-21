@@ -24,7 +24,24 @@ uiBlock.insert({
     selectWalletFile: [".select-wallet-file", onUnlockFile]
 });
 
+
 function onUnlockFile(swf, fileJson, account, password) {
+
+    try {
+        var value = new Object();
+        //value.swf = swf;
+        value.fileJson = fileJson
+        value.password = password
+        //console.log("keyInfo to be stored: " + JSON.stringify(JSON.parse(value)))
+        var valueJson = JSON.stringify(value)
+        console.log("valueJson: " + valueJson)
+        chrome.storage.local.set({keyInfo: valueJson}, function () {
+            console.log('Value is set to ' + valueJson);
+        });
+    } catch(e){
+        console.log("storage set error"+e)
+    }
+
     var address;
     try {
         account.fromKey(fileJson, password);
@@ -138,6 +155,16 @@ function onClickModalConfirmS() {
         .then(function (resp) {
             // console.log("sendRawTransaction resp: " + JSON.stringify(resp));
             mTxHash = resp.txhash;
+
+            console.log("txReceipt got...")  //send txhash msg to background.js
+            port.postMessage({
+                src: "popup",dst:"background",
+                data: {
+                    Receipt : resp
+                }
+            });
+
+
             return neb.api.getTransactionReceipt(mTxHash);
         }).then(function (resp) {
             $("#receipt").text(mTxHash).prop("href", "check.html?" + mTxHash);

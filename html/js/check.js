@@ -47,10 +47,28 @@ function onClickBtn() {
 }
 
 function doneGetTransactionReceipt(o) {
+
+
+    if (o.data) {
+        data = atob(resp.data);
+        lang = Prism.languages.javascript;
+
+        if (resp.type == "binary")
+            s = data;
+        else if (resp.type == "deploy")
+            s = Prism.highlight(js_beautify(JSON.parse(data).Source), lang);
+        else if (resp.type == "call")
+            s = Prism.highlight(js_beautify(data), lang);
+        else
+            s = "0x0";
+
+        $("#code").html(s);
+    }
+
     $(".modal.loading").modal("hide");
 
     $("#info").removeClass("active1");
-    $("#code").text(o.data);
+    //$("#code").text(o.data);
     $(".tx_hash").text(o.hash);
     $(".contract_addr").text(o.contract_address);
     $(".status").text(o.status == 1 ? "success" : (o.status == 0 ? "fail" : "pending"));
@@ -63,3 +81,4 @@ function doneGetTransactionReceipt(o) {
     $(".gas-price input").val(o.gas_price).trigger("input");
     $(".gas-used input").val(o.gas_used).trigger("input");
 }
+

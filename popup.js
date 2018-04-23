@@ -1,20 +1,26 @@
 
+//this port communicate with background
 var port = chrome.runtime.connect({name: "popup"});
 port.postMessage({src: "popup",dst:"background"});
 port.onMessage.addListener(function(msg) {
     console.log("msg listened: " +JSON.stringify(msg));
-    if (!! msg.unapprovedTxCount) {
-        if(msg.unapprovedTxCount > 0) {
-            var data = msg.unapprovedTxs[0].data
+    if (!! msg.unapprovedTxs) {
+        var length = msg.unapprovedTxs.length
+        if(msg.unapprovedTxs.length > 0) {
+            var data = msg.unapprovedTxs[length - 1].data
             console.log("to address: " + data.to + ", mount: " + data.value)
             $(".icon-address.to input").val(data.to);
-
             $("#amount").val(data.value);
+        }else{
+            console.log("no more unapprovedTxs")
+            $(".icon-address.to input").val('');
+            $("#amount").val('');
         }
+
     }
 });
 
-
+/*
 chrome.runtime.onConnect.addListener(function(port) {
     console.log("Connected ....." + port.name);
     port.onMessage.addListener(function(msg) {
@@ -22,7 +28,9 @@ chrome.runtime.onConnect.addListener(function(port) {
     })
 
 })
+*/
 
+//load stored keyfle info from chrome.storage.local
 document.addEventListener("DOMContentLoaded", function() {
     console.log("popout page loaded...")
     chrome.storage.local.get(['keyInfo'], function(result) {
@@ -30,24 +38,28 @@ document.addEventListener("DOMContentLoaded", function() {
         result = JSON.parse(result.keyInfo)
 
         if(!!result){
+            $(".container select-wallet-file").addClass("active1")
             console.log("unlockFile:")
             UnlockFile(result.fileJson, result.password)
+            getNextTx()
         }
 
 
     });
 });
 
-function outputObj(obj) {
-    var description = "";
-    for (var i in obj) {
-        description += i + " = " + obj[i] + "\n";
-    }
-    console.log(description);
-}
-
-
 var AccAddress ;
+
+function getNextTx() {
+    port.postMessage({
+        src: "popup",
+        dst:"background",
+        data: {
+            getNextTx : 'true'
+        }
+    });
+
+}
 
 function UnlockFile( fileJson, password) {
     console.log("\tfileJson: " + JSON.stringify(fileJson) )

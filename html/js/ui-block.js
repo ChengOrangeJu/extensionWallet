@@ -91,10 +91,10 @@ var uiBlock = function () {
                     "<div>" +
                     "    <a href=" + arr[0] + " data-i18n=header/new-wallet></a>" +
                     "    <a href=" + arr[1] + " data-i18n=header/send></a>" +
-                    "    <a href=" + arr[2] + " data-i18n=header/send-offline></a>" +
-                    "    <a href=" + arr[3] + " data-i18n=header/view></a>" +
+                   // "    <a href=" + arr[2] + " data-i18n=header/send-offline></a>" +
+                   // "    <a href=" + arr[3] + " data-i18n=header/view></a>" +
                     "    <a href=" + arr[4] + " data-i18n=header/check></a>" +
-                    "    <a href=" + arr[5] + " data-i18n=header/contract></a>" +
+                    //"    <a href=" + arr[5] + " data-i18n=header/contract></a>" +
                     "</div>" +
                     "<hr>"));
         }

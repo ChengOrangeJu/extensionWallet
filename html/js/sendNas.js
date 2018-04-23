@@ -12,6 +12,7 @@ var nebulas = require("nebulas"),
 
 neb.setRequest(new nebulas.HttpRequest(localSave.getItem("apiPrefix") || "https://testnet.nebulas.io/"));
 $("#generate").on("click", onClickGenerate);
+$("#reject").on("click", onClickReject);
 $("#modal-confirm .s").on("click", onClickModalConfirmS);
 $("#send_transaction").on("click", onClickSendTransaction);
 
@@ -83,7 +84,28 @@ function onUnlockFile(swf, fileJson, account, password) {
     }
 }
 
+function onClickReject() {
+    port.postMessage({
+        src: "popup",dst:"background",
+        data: {
+            reject : "true"
+        }
+
+    })
+    getNextTx()
+}
+
+
 function onClickGenerate() {
+
+    port.postMessage({
+        src: "popup",dst:"background",
+        data: {
+            generate : "true"
+        }
+
+    })
+
     var fromAddress, toAddress, balance, amount, gaslimit, gasprice, nonce, bnAmount;
 
     if (validateAll()) {

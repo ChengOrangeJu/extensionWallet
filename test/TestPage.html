@@ -67,7 +67,7 @@ document.getElementById("buttonGetACC").addEventListener("click",function(){
 
 
 
-// Event listener
+// listen message from contentscript
 window.addEventListener('message', function(e) {
     // e.detail contains the transferred data (can
     console.log("recived by page:" + e + ", e.data:"+ JSON.stringify(e.data));

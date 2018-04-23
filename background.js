@@ -10,12 +10,15 @@ var unapprovedTxs = [];
 
 var AccAddress ;
 
+//this might useless,
+/*
 var bg_port = chrome.runtime.connect({name: "background"});
 bg_port.postMessage({src: "background",dst:"all"});
 bg_port.onMessage.addListener(function(msg) {
-    console.log("msg listened: " + JSON.stringify(msg));
+    console.log("msg listened by bg_port: " + JSON.stringify(msg));
 
 });
+*/
 
 /*
 massage format is basically like this:
@@ -25,6 +28,8 @@ massage format is basically like this:
 	data: {}
 }
 */
+
+//receive msg from ContentScript and popup.js
 chrome.runtime.onConnect.addListener(function(port) {
 	console.log("Connected ....." + port.name );
 
@@ -38,11 +43,10 @@ chrome.runtime.onConnect.addListener(function(port) {
 		    if(!msg.data)
 		        return;
 		    if(msg.data.method === "neb_sendTransaction"){
-                unapprovedTxCount ++;
-                console.log("unapprovedTxCount:" + unapprovedTxCount);
-                chrome.browserAction.setBadgeText({text: unapprovedTxCount.toString()});
                 unapprovedTxs.push(msg.data)
-                chrome.windows.create({'url': 'html/sendNas_popout.html', 'type': 'popup'}, function(window) {
+                console.log("unapprovedTxCount:" + unapprovedTxs.length);
+                updateBadgeText()
+                chrome.windows.create({'url': 'html/sendNas.html', 'type': 'popup', height: 1024, width:420}, function(window) {
                 });
             }
             else if(msg.data.method === "getAccount")
@@ -51,15 +55,19 @@ chrome.runtime.onConnect.addListener(function(port) {
                 })
         }
         else if (msg.src === 'popup'){      //message from extension popup page
-		    console.log("msgFromPopup!" )
             if(!msg.data)
                 return;
             if(!!msg.data.AccAddress){
                 AccAddress = msg.data.AccAddress;
+            }
+            else if(!!msg.data.getNextTx){
                 port.postMessage({
-                    unapprovedTxCount : unapprovedTxCount,
                     unapprovedTxs : unapprovedTxs
                 })
+            }
+            else if(!!msg.data.generate || !!msg.data.reject){
+                unapprovedTxs.pop();
+                updateBadgeText();
             }
             else if(!!msg.data.Receipt){
                 console.log("Receipt: " + JSON.stringify(msg.data.Receipt));
@@ -70,7 +78,22 @@ chrome.runtime.onConnect.addListener(function(port) {
                 });
 
             }
+
         }
 	});
 });
+
+function updateBadgeText(){
+    if(unapprovedTxs.length === 0)
+        chrome.browserAction.setBadgeText({text:''});
+    else
+        chrome.browserAction.setBadgeText({text: unapprovedTxs.length.toString()});
+}
+
+//initial
+document.addEventListener("DOMContentLoaded", function() {
+    console.log("background page loaded...")
+    updateBadgeText()
+});
+
 
